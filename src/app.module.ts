@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import * as db from './config/db.config';
 
 @Module({
   imports: [
@@ -19,13 +20,13 @@ import { AuthModule } from './modules/auth/auth.module';
       ],
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
+      type: db.DATABASE_TYPE,
+      host: db.DATABASE_HOST,
       port: 5432,
-      password: 'postgres',
-      username: 'postgres',
+      username: db.DATABASE_USERNAME,
+      password: db.DATABASE_PASSWORD,
+      database: db.DATABASE,
       autoLoadEntities: true,
-      database: 'postgres',
       synchronize: true,
       logging: true,
     }),
