@@ -1,5 +1,14 @@
-import { Controller, Delete, Get, Post, Body, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Body,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UserService } from './user.service';
 import { UserEmailDto } from './dto/userEmail.dto';
@@ -7,6 +16,7 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { UserChangePasswordDto } from './dto/userChangePassword.dto';
 
 @Controller('user')
+@UseGuards(AuthGuard())
 @ApiTags('user')
 export class UserController {
   constructor(private userService: UserService) {}

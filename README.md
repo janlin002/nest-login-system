@@ -19,3 +19,7 @@ DB: PostgreSql
 **註銷帳號**
 
 [swagger document](http://localhost:8080/api#/)
+
+### auth lifeCycle chart
+
+![auth-lifecycle](./public/authLifecycle.png)
