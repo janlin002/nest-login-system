@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+// import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 import { User } from '@/entity/user.entities';
@@ -35,7 +35,8 @@ export class AuthService {
     }
 
     // compare(待比較的明碼, hash)
-    const isSameUser = await bcrypt.compare(password, user.password);
+    // const isSameUser = await bcrypt.compare(password, user.password);
+    const isSameUser = password === user.password;
 
     if (!isSameUser) {
       throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
@@ -55,13 +56,13 @@ export class AuthService {
   async register(registerDto: RegisterDto) {
     const { email, password } = registerDto;
 
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt();
+    // const passwordHash = await bcrypt.hash(password, salt);
 
     try {
       this.usersRepository.save({
         email,
-        password: passwordHash,
+        password,
       });
 
       return {
