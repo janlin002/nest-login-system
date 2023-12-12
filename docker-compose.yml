@@ -1,0 +1,59 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  # docker 的 postgresql 資料庫
+  postgres:
+    container_name: postgres
+    image: postgres
+    #自動重新啟動
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      #預設使用者
+      POSTGRES_USER: myuser
+      #預設密碼
+      POSTGRES_PASSWORD: mypassword
+      #預設資料庫
+      POSTGRES_DB: mydb
+      #將資料掛載到電腦中、刪除容器時資料還會保留
+      PGDATA: ./pgdata:/var/lib/postgresql/data/pgdata
+
+  # 訪問 Nest 專案: 8080
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres
+    environment:
+      - PORT=8080
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+
+  # 訪問 pgAdmin 專案: 5050
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nest-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+    ports:
+      - '5050:80'
+    depends_on:
+      - db
